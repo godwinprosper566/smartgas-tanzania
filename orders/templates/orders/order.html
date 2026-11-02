@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Gas - SmartGas</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f7fafc; max-width: 420px; margin: 40px auto; padding: 20px; }
+        h1 { color: #1a365d; text-align: center; }
+        label { display: block; margin-top: 15px; color: #2d3748; font-weight: bold; }
+        input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #cbd5e0; border-radius: 5px; font-size: 15px; box-sizing: border-box; }
+        .price-box { margin-top: 20px; padding: 12px; background-color: #ebf8ff; border-radius: 6px; text-align: center; font-size: 18px; color: #2b6cb0; font-weight: bold; }
+        button { width: 100%; background-color: #ed8936; color: white; border: none; padding: 12px; margin-top: 25px; border-radius: 6px; font-size: 16px; cursor: pointer; }
+        .nav { text-align: center; margin-bottom: 25px; }
+        .nav a { color: #2b6cb0; margin: 0 12px; text-decoration: none; font-weight: bold; }
+        footer { text-align: center; margin-top: 40px; color: #718096; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/order/">Order Gas</a>
+        <a href="/track/">Track Order</a>
+        {% if user.is_authenticated %}
+            <a href="/orders/">All Orders</a>
+            <a href="/report/">Daily Report</a>
+            <a href="/dashboard/">Dashboard</a>
+            <a href="/logout/">Logout ({{ user.username }})</a>
+        {% else %}
+            <a href="/login/">Staff Login</a>
+        {% endif %}
+    </div>
+
+    <h1>Order Gas</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <label>Customer Name</label>
+        <input type="text" name="name" required>
+
+        <label>Phone Number</label>
+        <input type="text" name="phone" required>
+
+        <label>Location</label>
+        <input type="text" name="location" required>
+
+        <label>Customer Type</label>
+        <select name="customer_type" id="customer_type" required onchange="updatePrice()">
+            <option value="">Select type</option>
+            <option value="Household">Household</option>
+            <option value="Vehicle">Vehicle (CNG)</option>
+            <option value="Business">Business</option>
+        </select>
+
+        <label>Cylinder Size</label>
+        <select name="size_kg" id="size" required onchange="updatePrice()">
+            <option value="">Select size</option>
+            <option value="6">6 kg</option>
+            <option value="15">15 kg</option>
+            <option value="45">45 kg</option>
+        </select>
+
+        <label>Notes (optional)</label>
+        <input type="text" name="notes" placeholder="Any special request...">
+
+        <div class="price-box" id="priceDisplay">Price: — TZS</div>
+        <p style="text-align:center; color:#718096; font-size:13px; margin-top:8px;">
+            Household / Business: 3,200 TZS per kg<br>
+            Vehicle (CNG): 2,800 TZS per kg
+        </p>
+
+        <button type="submit">Submit Order</button>
+    </form>
+
+    <footer>SmartGas Tanzania – Safe Gas Delivery</footer>
+
+    <script>
+        function updatePrice() {
+            const type = document.getElementById('customer_type').value;
+            const size = document.getElementById('size').value;
+            const display = document.getElementById('priceDisplay');
+            let pricePerKg = 3200;
+            if (type === 'Vehicle') pricePerKg = 2800;
+            if (size && type) {
+                display.innerText = "Price: " + (size * pricePerKg).toLocaleString() + " TZS";
+            } else {
+                display.innerText = "Price: — TZS";
+            }
+        }
+    </script>
+</body>
+</html>

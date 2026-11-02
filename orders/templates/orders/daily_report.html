@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Daily Report - SmartGas</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f7fafc; max-width: 900px; margin: 30px auto; padding: 20px; }
+        h1 { color: #1a365d; text-align: center; }
+        .nav { text-align: center; margin-bottom: 20px; }
+        .nav a { color: #2b6cb0; margin: 0 12px; text-decoration: none; font-weight: bold; }
+        .summary { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: left; }
+        th { background: #1a365d; color: white; }
+        .btn { display: inline-block; margin-top: 20px; background: #ed8936; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+        .print-btn { background: #4a5568; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/order/">Order Gas</a>
+        <a href="/track/">Track Order</a>
+        {% if user.is_authenticated %}
+            <a href="/orders/">All Orders</a>
+            <a href="/report/">Daily Report</a>
+            <a href="/dashboard/">Dashboard</a>
+            <a href="/logout/">Logout ({{ user.username }})</a>
+        {% else %}
+            <a href="/login/">Staff Login</a>
+        {% endif %}
+    </div>
+
+    <h1>Daily Report</h1>
+    <p style="text-align:center;">Date: {{ today }}</p>
+
+    <div style="text-align:center;">
+        <button onclick="window.print()" class="print-btn">Print Report</button>
+    </div>
+
+    <div class="summary">
+        <strong>Orders today:</strong> {{ total_orders }} &nbsp;|&nbsp;
+        <strong>Total Sales:</strong> {{ total_sales }} TZS
+    </div>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Price</th>
+            <th>Status</th>
+        </tr>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.name }}</td>
+            <td>{{ order.customer_type }}</td>
+            <td>{{ order.size_kg }} kg</td>
+            <td>{{ order.price }} TZS</td>
+            <td>{{ order.status }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" style="text-align:center;">No orders today.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="/orders/" class="btn">Back to All Orders</a>
+    <a href="/dashboard/" class="btn">Dashboard</a>
+</body>
+</html>

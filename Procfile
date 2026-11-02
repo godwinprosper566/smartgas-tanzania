@@ -1,0 +1,1 @@
+web: gunicorn smartgas_web.wsgi

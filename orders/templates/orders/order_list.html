@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Orders - SmartGas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7fafc;
+            max-width: 1250px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #1a365d;
+            text-align: center;
+        }
+        .nav {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .nav a {
+            color: #2b6cb0;
+            margin: 0 12px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .summary {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .summary strong {
+            color: #1a365d;
+        }
+        .filters {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .filters a {
+            display: inline-block;
+            margin: 4px;
+            padding: 6px 12px;
+            background: #edf2f7;
+            color: #2d3748;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+        .search-box {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .search-box input {
+            padding: 8px 12px;
+            width: 260px;
+            border: 1px solid #cbd5e0;
+            border-radius: 5px;
+        }
+        .search-box button {
+            padding: 8px 16px;
+            background: #2b6cb0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 8px 10px;
+            text-align: left;
+            font-size: 13px;
+        }
+        th {
+            background-color: #1a365d;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #edf2f7;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #ed8936;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .action-btn {
+            color: white;
+            padding: 4px 7px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+            margin-right: 2px;
+            display: inline-block;
+            margin-bottom: 3px;
+        }
+        .messages {
+            margin-bottom: 15px;
+        }
+        .messages p {
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #718096;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/order/">Order Gas</a>
+        <a href="/track/">Track Order</a>
+        {% if user.is_authenticated %}
+            <a href="/dashboard/">Dashboard</a>
+            <a href="/orders/">All Orders</a>
+            <a href="/report/">Daily Report</a>
+            <a href="/logout/">Logout ({{ user.username }})</a>
+        {% else %}
+            <a href="/login/">Staff Login</a>
+        {% endif %}
+    </div>
+
+    <h1>All Orders</h1>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="search-box">
+        <form method="GET">
+            <input type="text" name="q" value="{{ search }}" placeholder="Search by name or phone...">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="summary">
+        <strong>Total Sales:</strong> {{ total_sales|default:0 }} TZS
+        &nbsp;|&nbsp;
+        <strong>Pending:</strong> {{ pending_count }}
+    </div>
+
+    <div class="filters">
+        <a href="/orders/">All</a>
+        <a href="/orders/?status=Pending">Pending</a>
+        <a href="/orders/?status=Out for Delivery">Out for Delivery</a>
+        <a href="/orders/?status=Delivered">Delivered</a>
+        <a href="/orders/?payment=Paid">Paid</a>
+        <a href="/orders/?payment=Unpaid">Unpaid</a>
+        <a href="/orders/?type=Household">Household</a>
+        <a href="/orders/?type=Vehicle">Vehicle</a>
+        <a href="/orders/?type=Business">Business</a>
+    </div>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Location</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Payment</th>
+            <th>Notes</th>
+            <th>Action</th>
+        </tr>
+
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.created_at|date:"d M Y" }}</td>
+            <td>{{ order.name }}</td>
+            <td>{{ order.phone }}</td>
+            <td>{{ order.location }}</td>
+            <td>{{ order.customer_type }}</td>
+            <td>{{ order.size_kg }} kg</td>
+            <td>{{ order.price }} TZS</td>
+            <td>
+                {% if order.status == "Pending" %}
+                    <span style="color:#dd6b20; font-weight:bold;">{{ order.status }}</span>
+                {% elif order.status == "Out for Delivery" %}
+                    <span style="color:#3182ce; font-weight:bold;">{{ order.status }}</span>
+                {% else %}
+                    <span style="color:#38a169; font-weight:bold;">{{ order.status }}</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if order.payment_status == "Paid" %}
+                    <span style="color:#38a169; font-weight:bold;">Paid</span>
+                {% else %}
+                    <span style="color:#e53e3e; font-weight:bold;">Unpaid</span>
+                {% endif %}
+            </td>
+            <td>{{ order.notes|default:"—" }}</td>
+            <td>
+                <a href="{% url 'edit_order' order.id %}" class="action-btn" style="background:#2b6cb0;">
+                    Edit
+                </a>
+
+                {% if order.status == "Pending" %}
+                    <a href="{% url 'mark_out_for_delivery' order.id %}" class="action-btn" style="background:#dd6b20;">
+                        Out for Delivery
+                    </a>
+                {% endif %}
+
+                {% if order.status == "Pending" or order.status == "Out for Delivery" %}
+                    <a href="{% url 'mark_delivered' order.id %}" class="action-btn" style="background:#38a169;">
+                        Delivered
+                    </a>
+                {% endif %}
+
+                {% if order.payment_status != "Paid" %}
+                    <a href="{% url 'mark_paid' order.id %}" class="action-btn" style="background:#805ad5;">
+                        Mark Paid
+                    </a>
+                {% endif %}
+
+                <a href="https://wa.me/255{{ order.phone|slice:'1:' }}" target="_blank" class="action-btn" style="background:#25D366;">
+                    WhatsApp
+                </a>
+
+                <a href="{% url 'delete_order' order.id %}"
+                   onclick="return confirm('Delete this order?')"
+                   class="action-btn" style="background:#e53e3e;">
+                    Delete
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="12" style="text-align:center;">No orders found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="/" class="btn">Back to Home</a>
+    <a href="/order/" class="btn">New Order</a>
+    <a href="/dashboard/" class="btn">Dashboard</a>
+
+    <footer>
+        SmartGas Tanzania – Safe Gas Delivery
+    </footer>
+
+</body>
+</html>

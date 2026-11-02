@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Dashboard - SmartGas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7fafc;
+            max-width: 950px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #1a365d;
+            text-align: center;
+        }
+        h2 {
+            color: #1a365d;
+            text-align: center;
+            margin-top: 40px;
+        }
+        .nav {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .nav a {
+            color: #2b6cb0;
+            margin: 0 12px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 160px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+        .card h2 {
+            margin: 0;
+            color: #1a365d;
+            font-size: 28px;
+        }
+        .card p {
+            margin: 8px 0 0;
+            color: #4a5568;
+            font-size: 14px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-top: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+        th {
+            background: #1a365d;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #edf2f7;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 25px;
+            background: #ed8936;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 8px;
+        }
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #718096;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/order/">Order Gas</a>
+        <a href="/track/">Track Order</a>
+        <a href="/orders/">All Orders</a>
+        <a href="/report/">Daily Report</a>
+        <a href="/dashboard/">Dashboard</a>
+        <a href="/logout/">Logout ({{ user.username }})</a>
+    </div>
+
+    <h1>Staff Dashboard</h1>
+
+    <div class="cards">
+        <div class="card">
+            <h2>{{ total_orders }}</h2>
+            <p>Total Orders</p>
+        </div>
+        <div class="card">
+            <h2>{{ pending }}</h2>
+            <p>Pending</p>
+        </div>
+        <div class="card">
+            <h2>{{ out_for_delivery }}</h2>
+            <p>Out for Delivery</p>
+        </div>
+        <div class="card">
+            <h2>{{ delivered }}</h2>
+            <p>Delivered</p>
+        </div>
+        <div class="card">
+            <h2>{{ paid }}</h2>
+            <p>Paid</p>
+        </div>
+        <div class="card">
+            <h2>{{ unpaid }}</h2>
+            <p>Unpaid</p>
+        </div>
+        <div class="card">
+            <h2>{{ today_orders }}</h2>
+            <p>Today's Orders</p>
+        </div>
+        <div class="card">
+            <h2>{{ total_sales }}</h2>
+            <p>Total Sales (TZS)</p>
+        </div>
+    </div>
+
+    <h2>Recent Orders</h2>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Status</th>
+            <th>Price</th>
+        </tr>
+        {% for order in recent_orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.name }}</td>
+            <td>{{ order.customer_type }}</td>
+            <td>{{ order.size_kg }} kg</td>
+            <td>{{ order.status }}</td>
+            <td>{{ order.price }} TZS</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" style="text-align:center;">No orders yet.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="buttons">
+        <a href="/orders/" class="btn">Manage Orders</a>
+        <a href="/report/" class="btn">Daily Report</a>
+        <a href="/order/" class="btn">New Order</a>
+    </div>
+
+    <footer>
+        SmartGas Tanzania – Safe Gas Delivery
+    </footer>
+
+</body>
+</html>

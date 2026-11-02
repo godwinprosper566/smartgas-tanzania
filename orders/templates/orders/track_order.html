@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Track Order - SmartGas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7fafc;
+            max-width: 450px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #1a365d;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #cbd5e0;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            background: #ed8936;
+            color: white;
+            border: none;
+            padding: 12px;
+            margin-top: 20px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .nav {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .nav a {
+            color: #2b6cb0;
+            margin: 0 12px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .result {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        .result p {
+            margin: 8px 0;
+            font-size: 15px;
+        }
+        .error {
+            color: #e53e3e;
+            text-align: center;
+            margin-top: 15px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #718096;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/order/">Order Gas</a>
+        <a href="/track/">Track Order</a>
+        {% if user.is_authenticated %}
+            <a href="/dashboard/">Dashboard</a>
+            <a href="/orders/">All Orders</a>
+            <a href="/logout/">Logout</a>
+        {% else %}
+            <a href="/login/">Staff Login</a>
+        {% endif %}
+    </div>
+
+    <h1>Track Your Order</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <label>Enter Order ID</label>
+        <input type="number" name="order_id" placeholder="Example: 5" required>
+        <button type="submit">Track Order</button>
+    </form>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if order %}
+    <div class="result">
+        <p><strong>Order ID:</strong> #{{ order.id }}</p>
+        <p><strong>Name:</strong> {{ order.name }}</p>
+        <p><strong>Phone:</strong> {{ order.phone }}</p>
+        <p><strong>Location:</strong> {{ order.location }}</p>
+        <p><strong>Type:</strong> {{ order.customer_type }}</p>
+        <p><strong>Size:</strong> {{ order.size_kg }} kg</p>
+        <p><strong>Price:</strong> {{ order.price }} TZS</p>
+        <p><strong>Status:</strong> {{ order.status }}</p>
+        <p><strong>Payment:</strong> {{ order.payment_status }}</p>
+        <p><strong>Notes:</strong> {{ order.notes|default:"—" }}</p>
+    </div>
+    {% endif %}
+
+    <footer>SmartGas Tanzania – Safe Gas Delivery</footer>
+</body>
+</html>
