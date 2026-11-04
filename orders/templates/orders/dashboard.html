@@ -10,19 +10,9 @@
             margin: 30px auto;
             padding: 20px;
         }
-        h1 {
-            color: #1a365d;
-            text-align: center;
-        }
-        h2 {
-            color: #1a365d;
-            text-align: center;
-            margin-top: 40px;
-        }
-        .nav {
-            text-align: center;
-            margin-bottom: 25px;
-        }
+        h1 { color: #1a365d; text-align: center; }
+        h2 { color: #1a365d; text-align: center; margin-top: 40px; }
+        .nav { text-align: center; margin-bottom: 25px; }
         .nav a {
             color: #2b6cb0;
             margin: 0 12px;
@@ -66,13 +56,8 @@
             text-align: left;
             font-size: 14px;
         }
-        th {
-            background: #1a365d;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background: #edf2f7;
-        }
+        th { background: #1a365d; color: white; }
+        tr:nth-child(even) { background: #edf2f7; }
         .btn {
             display: inline-block;
             margin-top: 25px;
@@ -83,10 +68,7 @@
             border-radius: 6px;
             margin: 8px;
         }
-        .buttons {
-            text-align: center;
-            margin-top: 20px;
-        }
+        .buttons { text-align: center; margin-top: 20px; }
         footer {
             text-align: center;
             margin-top: 50px;
@@ -96,7 +78,6 @@
     </style>
 </head>
 <body>
-
     <div class="nav">
         <a href="/">Home</a>
         <a href="/order/">Order Gas</a>
@@ -108,6 +89,9 @@
     </div>
 
     <h1>Staff Dashboard</h1>
+    <p style="text-align:center; color:#718096; font-size:14px;">
+        Last updated: {% now "d M Y, H:i" %}
+    </p>
 
     <div class="cards">
         <div class="card">
@@ -135,6 +119,10 @@
             <p>Unpaid</p>
         </div>
         <div class="card">
+            <h2>{{ paid_sales }}</h2>
+            <p>Paid Sales (TZS)</p>
+        </div>
+        <div class="card">
             <h2>{{ today_orders }}</h2>
             <p>Today's Orders</p>
         </div>
@@ -153,6 +141,7 @@
             <th>Type</th>
             <th>Size</th>
             <th>Status</th>
+            <th>Payment</th>
             <th>Price</th>
         </tr>
         {% for order in recent_orders %}
@@ -162,11 +151,12 @@
             <td>{{ order.customer_type }}</td>
             <td>{{ order.size_kg }} kg</td>
             <td>{{ order.status }}</td>
+            <td>{{ order.payment_status }}</td>
             <td>{{ order.price }} TZS</td>
         </tr>
         {% empty %}
         <tr>
-            <td colspan="6" style="text-align:center;">No orders yet.</td>
+            <td colspan="7" style="text-align:center;">No orders yet.</td>
         </tr>
         {% endfor %}
     </table>
@@ -177,9 +167,6 @@
         <a href="/order/" class="btn">New Order</a>
     </div>
 
-    <footer>
-        SmartGas Tanzania – Safe Gas Delivery
-    </footer>
-
+    <footer>SmartGas Tanzania – Safe Gas Delivery</footer>
 </body>
 </html>

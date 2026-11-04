@@ -3,16 +3,64 @@
 <head>
     <title>Daily Report - SmartGas</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f7fafc; max-width: 900px; margin: 30px auto; padding: 20px; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7fafc;
+            max-width: 950px;
+            margin: 30px auto;
+            padding: 20px;
+        }
         h1 { color: #1a365d; text-align: center; }
         .nav { text-align: center; margin-bottom: 20px; }
-        .nav a { color: #2b6cb0; margin: 0 12px; text-decoration: none; font-weight: bold; }
-        .summary { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
-        table { width: 100%; border-collapse: collapse; background: white; }
-        th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: left; }
+        .nav a {
+            color: #2b6cb0;
+            margin: 0 12px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .summary {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            text-align: left;
+            font-size: 14px;
+        }
         th { background: #1a365d; color: white; }
-        .btn { display: inline-block; margin-top: 20px; background: #ed8936; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
-        .print-btn { background: #4a5568; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin-bottom: 15px; }
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            background: #ed8936;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .print-btn {
+            background: #4a5568;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #718096;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
@@ -20,14 +68,10 @@
         <a href="/">Home</a>
         <a href="/order/">Order Gas</a>
         <a href="/track/">Track Order</a>
-        {% if user.is_authenticated %}
-            <a href="/orders/">All Orders</a>
-            <a href="/report/">Daily Report</a>
-            <a href="/dashboard/">Dashboard</a>
-            <a href="/logout/">Logout ({{ user.username }})</a>
-        {% else %}
-            <a href="/login/">Staff Login</a>
-        {% endif %}
+        <a href="/dashboard/" class="btn">Dashboard</a>
+        <a href="/orders/">All Orders</a>
+        <a href="/report/">Daily Report</a>
+        <a href="/logout/">Logout</a>
     </div>
 
     <h1>Daily Report</h1>
@@ -50,6 +94,7 @@
             <th>Size</th>
             <th>Price</th>
             <th>Status</th>
+            <th>Payment</th>
         </tr>
         {% for order in orders %}
         <tr>
@@ -59,15 +104,18 @@
             <td>{{ order.size_kg }} kg</td>
             <td>{{ order.price }} TZS</td>
             <td>{{ order.status }}</td>
+            <td>{{ order.payment_status }}</td>
         </tr>
         {% empty %}
         <tr>
-            <td colspan="6" style="text-align:center;">No orders today.</td>
+            <td colspan="7" style="text-align:center;">No orders today.</td>
         </tr>
         {% endfor %}
     </table>
 
     <a href="/orders/" class="btn">Back to All Orders</a>
     <a href="/dashboard/" class="btn">Dashboard</a>
+
+    <footer>SmartGas Tanzania – Safe Gas Delivery</footer>
 </body>
 </html>

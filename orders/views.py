@@ -7,9 +7,14 @@ from .models import Order
 
 
 def home(request):
-    pending_count = Order.objects.filter(status='Pending').count()
-    total_orders = Order.objects.count()
-    total_sales = sum(order.price for order in Order.objects.all())
+    if request.user.is_authenticated:
+        pending_count = Order.objects.filter(status='Pending').count()
+        total_orders = Order.objects.count()
+        total_sales = sum(order.price for order in Order.objects.all())
+    else:
+        pending_count = 0
+        total_orders = 0
+        total_sales = 0
 
     return render(request, 'orders/home.html', {
         'pending_count': pending_count,
@@ -215,6 +220,7 @@ def dashboard(request):
     paid = Order.objects.filter(payment_status='Paid').count()
     unpaid = Order.objects.filter(payment_status='Unpaid').count()
     total_sales = sum(order.price for order in Order.objects.all())
+    paid_sales = sum(order.price for order in Order.objects.filter(payment_status='Paid'))
     today_orders = Order.objects.filter(created_at__date=timezone.now().date()).count()
     recent_orders = Order.objects.all().order_by('-id')[:5]
 
@@ -226,6 +232,7 @@ def dashboard(request):
         'paid': paid,
         'unpaid': unpaid,
         'total_sales': total_sales,
+        'paid_sales': paid_sales,
         'today_orders': today_orders,
         'recent_orders': recent_orders,
     })

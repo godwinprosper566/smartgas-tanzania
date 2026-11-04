@@ -10,15 +10,8 @@
             margin: 40px auto;
             padding: 20px;
         }
-        h1 {
-            color: #1a365d;
-            text-align: center;
-        }
-        label {
-            display: block;
-            margin-top: 15px;
-            font-weight: bold;
-        }
+        h1 { color: #1a365d; text-align: center; }
+        label { display: block; margin-top: 15px; font-weight: bold; }
         input {
             width: 100%;
             padding: 10px;
@@ -38,10 +31,7 @@
             font-size: 16px;
             cursor: pointer;
         }
-        .nav {
-            text-align: center;
-            margin-bottom: 25px;
-        }
+        .nav { text-align: center; margin-bottom: 25px; }
         .nav a {
             color: #2b6cb0;
             margin: 0 12px;
@@ -55,15 +45,8 @@
             margin-top: 25px;
             box-shadow: 0 1px 4px rgba(0,0,0,0.08);
         }
-        .result p {
-            margin: 8px 0;
-            font-size: 15px;
-        }
-        .error {
-            color: #e53e3e;
-            text-align: center;
-            margin-top: 15px;
-        }
+        .result p { margin: 10px 0; font-size: 15px; }
+        .error { color: #e53e3e; text-align: center; margin-top: 15px; }
         footer {
             text-align: center;
             margin-top: 40px;
@@ -102,14 +85,29 @@
     {% if order %}
     <div class="result">
         <p><strong>Order ID:</strong> #{{ order.id }}</p>
+        <p><strong>Date:</strong> {{ order.created_at|date:"d M Y, H:i" }}</p>
         <p><strong>Name:</strong> {{ order.name }}</p>
         <p><strong>Phone:</strong> {{ order.phone }}</p>
         <p><strong>Location:</strong> {{ order.location }}</p>
         <p><strong>Type:</strong> {{ order.customer_type }}</p>
         <p><strong>Size:</strong> {{ order.size_kg }} kg</p>
         <p><strong>Price:</strong> {{ order.price }} TZS</p>
-        <p><strong>Status:</strong> {{ order.status }}</p>
-        <p><strong>Payment:</strong> {{ order.payment_status }}</p>
+        <p><strong>Status:</strong>
+            {% if order.status == "Pending" %}
+                <span style="color:#dd6b20; font-weight:bold;">{{ order.status }}</span>
+            {% elif order.status == "Out for Delivery" %}
+                <span style="color:#3182ce; font-weight:bold;">{{ order.status }}</span>
+            {% else %}
+                <span style="color:#38a169; font-weight:bold;">{{ order.status }}</span>
+            {% endif %}
+        </p>
+        <p><strong>Payment:</strong>
+            {% if order.payment_status == "Paid" %}
+                <span style="color:#38a169; font-weight:bold;">Paid</span>
+            {% else %}
+                <span style="color:#e53e3e; font-weight:bold;">Unpaid</span>
+            {% endif %}
+        </p>
         <p><strong>Notes:</strong> {{ order.notes|default:"—" }}</p>
     </div>
     {% endif %}

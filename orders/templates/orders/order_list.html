@@ -10,14 +10,8 @@
             margin: 30px auto;
             padding: 20px;
         }
-        h1 {
-            color: #1a365d;
-            text-align: center;
-        }
-        .nav {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+        h1 { color: #1a365d; text-align: center; }
+        .nav { text-align: center; margin-bottom: 20px; }
         .nav a {
             color: #2b6cb0;
             margin: 0 12px;
@@ -31,13 +25,8 @@
             margin-bottom: 15px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        .summary strong {
-            color: #1a365d;
-        }
-        .filters {
-            text-align: center;
-            margin-bottom: 15px;
-        }
+        .summary strong { color: #1a365d; }
+        .filters { text-align: center; margin-bottom: 10px; }
         .filters a {
             display: inline-block;
             margin: 4px;
@@ -48,10 +37,7 @@
             border-radius: 5px;
             font-size: 13px;
         }
-        .search-box {
-            text-align: center;
-            margin-bottom: 15px;
-        }
+        .search-box { text-align: center; margin-bottom: 15px; }
         .search-box input {
             padding: 8px 12px;
             width: 260px;
@@ -78,13 +64,8 @@
             text-align: left;
             font-size: 13px;
         }
-        th {
-            background-color: #1a365d;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #edf2f7;
-        }
+        th { background-color: #1a365d; color: white; }
+        tr:nth-child(even) { background-color: #edf2f7; }
         .btn {
             display: inline-block;
             margin-top: 20px;
@@ -105,9 +86,7 @@
             display: inline-block;
             margin-bottom: 3px;
         }
-        .messages {
-            margin-bottom: 15px;
-        }
+        .messages { margin-bottom: 15px; }
         .messages p {
             background: #c6f6d5;
             color: #22543d;
@@ -123,13 +102,12 @@
     </style>
 </head>
 <body>
-
     <div class="nav">
         <a href="/">Home</a>
         <a href="/order/">Order Gas</a>
         <a href="/track/">Track Order</a>
         {% if user.is_authenticated %}
-            <a href="/dashboard/">Dashboard</a>
+            <a href="/dashboard/" class="btn">Dashboard</a>
             <a href="/orders/">All Orders</a>
             <a href="/report/">Daily Report</a>
             <a href="/logout/">Logout ({{ user.username }})</a>
@@ -172,6 +150,10 @@
         <a href="/orders/?type=Vehicle">Vehicle</a>
         <a href="/orders/?type=Business">Business</a>
     </div>
+
+    <p style="text-align:center; color:#4a5568; font-size:14px; margin-bottom:15px;">
+        Showing {{ orders|length }} order{{ orders|length|pluralize }}
+    </p>
 
     <table>
         <tr>
@@ -217,42 +199,32 @@
             </td>
             <td>{{ order.notes|default:"—" }}</td>
             <td>
-                <a href="{% url 'edit_order' order.id %}" class="action-btn" style="background:#2b6cb0;">
-                    Edit
-                </a>
+                <a href="{% url 'edit_order' order.id %}" class="action-btn" style="background:#2b6cb0;">Edit</a>
 
                 {% if order.status == "Pending" %}
-                    <a href="{% url 'mark_out_for_delivery' order.id %}" class="action-btn" style="background:#dd6b20;">
-                        Out for Delivery
-                    </a>
+                    <a href="{% url 'mark_out_for_delivery' order.id %}" class="action-btn" style="background:#dd6b20;">Out for Delivery</a>
                 {% endif %}
 
                 {% if order.status == "Pending" or order.status == "Out for Delivery" %}
-                    <a href="{% url 'mark_delivered' order.id %}" class="action-btn" style="background:#38a169;">
-                        Delivered
-                    </a>
+                    <a href="{% url 'mark_delivered' order.id %}" class="action-btn" style="background:#38a169;">Delivered</a>
                 {% endif %}
 
                 {% if order.payment_status != "Paid" %}
-                    <a href="{% url 'mark_paid' order.id %}" class="action-btn" style="background:#805ad5;">
-                        Mark Paid
-                    </a>
+                    <a href="{% url 'mark_paid' order.id %}" class="action-btn" style="background:#805ad5;">Mark Paid</a>
                 {% endif %}
 
-                <a href="https://wa.me/255{{ order.phone|slice:'1:' }}" target="_blank" class="action-btn" style="background:#25D366;">
-                    WhatsApp
-                </a>
+                <a href="https://wa.me/255{{ order.phone|slice:'1:' }}" target="_blank" class="action-btn" style="background:#25D366;">WhatsApp</a>
 
                 <a href="{% url 'delete_order' order.id %}"
                    onclick="return confirm('Delete this order?')"
-                   class="action-btn" style="background:#e53e3e;">
-                    Delete
-                </a>
+                   class="action-btn" style="background:#e53e3e;">Delete</a>
             </td>
         </tr>
         {% empty %}
         <tr>
-            <td colspan="12" style="text-align:center;">No orders found.</td>
+            <td colspan="12" style="text-align:center; padding:20px; color:#718096;">
+                No orders found. <a href="/order/">Create the first order</a>
+            </td>
         </tr>
         {% endfor %}
     </table>
@@ -261,9 +233,6 @@
     <a href="/order/" class="btn">New Order</a>
     <a href="/dashboard/" class="btn">Dashboard</a>
 
-    <footer>
-        SmartGas Tanzania – Safe Gas Delivery
-    </footer>
-
+    <footer>SmartGas Tanzania – Safe Gas Delivery</footer>
 </body>
 </html>
