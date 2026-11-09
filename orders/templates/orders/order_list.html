@@ -6,7 +6,7 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f7fafc;
-            max-width: 1250px;
+            max-width: 1300px;
             margin: 30px auto;
             padding: 20px;
         }
@@ -60,7 +60,7 @@
         }
         th, td {
             border: 1px solid #e2e8f0;
-            padding: 8px 10px;
+            padding: 8px 9px;
             text-align: left;
             font-size: 13px;
         }
@@ -107,7 +107,7 @@
         <a href="/order/">Order Gas</a>
         <a href="/track/">Track Order</a>
         {% if user.is_authenticated %}
-            <a href="/dashboard/" class="btn">Dashboard</a>
+            <a href="/dashboard/">Dashboard</a>
             <a href="/orders/">All Orders</a>
             <a href="/report/">Daily Report</a>
             <a href="/logout/">Logout ({{ user.username }})</a>
@@ -167,6 +167,7 @@
             <th>Price</th>
             <th>Status</th>
             <th>Payment</th>
+            <th>Points</th>
             <th>Notes</th>
             <th>Action</th>
         </tr>
@@ -197,6 +198,7 @@
                     <span style="color:#e53e3e; font-weight:bold;">Unpaid</span>
                 {% endif %}
             </td>
+            <td>{{ order.points }}</td>
             <td>{{ order.notes|default:"—" }}</td>
             <td>
                 <a href="{% url 'edit_order' order.id %}" class="action-btn" style="background:#2b6cb0;">Edit</a>
@@ -222,7 +224,7 @@
         </tr>
         {% empty %}
         <tr>
-            <td colspan="12" style="text-align:center; padding:20px; color:#718096;">
+            <td colspan="13" style="text-align:center; padding:20px; color:#718096;">
                 No orders found. <a href="/order/">Create the first order</a>
             </td>
         </tr>

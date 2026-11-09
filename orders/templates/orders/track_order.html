@@ -108,6 +108,7 @@
                 <span style="color:#e53e3e; font-weight:bold;">Unpaid</span>
             {% endif %}
         </p>
+        <p><strong>Points earned:</strong> {{ order.points }}</p>
         <p><strong>Notes:</strong> {{ order.notes|default:"—" }}</p>
     </div>
     {% endif %}

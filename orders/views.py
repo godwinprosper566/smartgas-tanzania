@@ -38,6 +38,7 @@ def order_page(request):
             price_per_kg = 3200
 
         price = size_kg * price_per_kg
+        points = size_kg  # 1 point per kg
 
         new_order = Order.objects.create(
             name=name,
@@ -48,12 +49,12 @@ def order_page(request):
             price=price,
             status='Pending',
             payment_status='Unpaid',
-            notes=notes
+            notes=notes,
+            points=points
         )
         return redirect('success', order_id=new_order.id)
 
     return render(request, 'orders/order.html')
-
 
 def success(request, order_id):
     return render(request, 'orders/success.html', {
@@ -213,6 +214,8 @@ def track_order(request):
 
 @login_required(login_url='login')
 def dashboard(request):
+    from datetime import timedelta
+
     total_orders = Order.objects.count()
     pending = Order.objects.filter(status='Pending').count()
     out_for_delivery = Order.objects.filter(status='Out for Delivery').count()
@@ -221,8 +224,22 @@ def dashboard(request):
     unpaid = Order.objects.filter(payment_status='Unpaid').count()
     total_sales = sum(order.price for order in Order.objects.all())
     paid_sales = sum(order.price for order in Order.objects.filter(payment_status='Paid'))
+    total_points = sum(order.points for order in Order.objects.all())
     today_orders = Order.objects.filter(created_at__date=timezone.now().date()).count()
     recent_orders = Order.objects.all().order_by('-id')[:5]
+
+    household = Order.objects.filter(customer_type='Household').count()
+    vehicle = Order.objects.filter(customer_type='Vehicle').count()
+    business = Order.objects.filter(customer_type='Business').count()
+
+    today = timezone.now().date()
+    week_start = today - timedelta(days=today.weekday())
+    month_start = today.replace(day=1)
+
+    daily_orders = Order.objects.filter(created_at__date=today).count()
+    weekly_orders = Order.objects.filter(created_at__date__gte=week_start).count()
+    monthly_orders = Order.objects.filter(created_at__date__gte=month_start).count()
+    daily_pending = Order.objects.filter(created_at__date=today, status='Pending').count()
 
     return render(request, 'orders/dashboard.html', {
         'total_orders': total_orders,
@@ -233,6 +250,14 @@ def dashboard(request):
         'unpaid': unpaid,
         'total_sales': total_sales,
         'paid_sales': paid_sales,
+        'total_points': total_points,
         'today_orders': today_orders,
         'recent_orders': recent_orders,
+        'household': household,
+        'vehicle': vehicle,
+        'business': business,
+        'daily_orders': daily_orders,
+        'weekly_orders': weekly_orders,
+        'monthly_orders': monthly_orders,
+        'daily_pending': daily_pending,
     })

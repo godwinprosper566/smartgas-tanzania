@@ -6,7 +6,7 @@
         body {
             font-family: Arial, sans-serif;
             background: #f7fafc;
-            max-width: 950px;
+            max-width: 1100px;
             margin: 30px auto;
             padding: 20px;
         }
@@ -27,21 +27,21 @@
         }
         .card {
             background: white;
-            padding: 20px;
+            padding: 18px;
             border-radius: 10px;
-            width: 160px;
+            width: 145px;
             text-align: center;
             box-shadow: 0 2px 6px rgba(0,0,0,0.08);
         }
         .card h2 {
             margin: 0;
             color: #1a365d;
-            font-size: 28px;
+            font-size: 26px;
         }
         .card p {
             margin: 8px 0 0;
             color: #4a5568;
-            font-size: 14px;
+            font-size: 13px;
         }
         table {
             width: 100%;
@@ -94,46 +94,25 @@
     </p>
 
     <div class="cards">
-        <div class="card">
-            <h2>{{ total_orders }}</h2>
-            <p>Total Orders</p>
-        </div>
-        <div class="card">
-            <h2>{{ pending }}</h2>
-            <p>Pending</p>
-        </div>
-        <div class="card">
-            <h2>{{ out_for_delivery }}</h2>
-            <p>Out for Delivery</p>
-        </div>
-        <div class="card">
-            <h2>{{ delivered }}</h2>
-            <p>Delivered</p>
-        </div>
-        <div class="card">
-            <h2>{{ paid }}</h2>
-            <p>Paid</p>
-        </div>
-        <div class="card">
-            <h2>{{ unpaid }}</h2>
-            <p>Unpaid</p>
-        </div>
-        <div class="card">
-            <h2>{{ paid_sales }}</h2>
-            <p>Paid Sales (TZS)</p>
-        </div>
-        <div class="card">
-            <h2>{{ today_orders }}</h2>
-            <p>Today's Orders</p>
-        </div>
-        <div class="card">
-            <h2>{{ total_sales }}</h2>
-            <p>Total Sales (TZS)</p>
-        </div>
+        <div class="card"><h2>{{ total_orders }}</h2><p>Total Orders</p></div>
+        <div class="card"><h2>{{ pending }}</h2><p>Pending</p></div>
+        <div class="card"><h2>{{ out_for_delivery }}</h2><p>Out for Delivery</p></div>
+        <div class="card"><h2>{{ delivered }}</h2><p>Delivered</p></div>
+        <div class="card"><h2>{{ paid }}</h2><p>Paid</p></div>
+        <div class="card"><h2>{{ unpaid }}</h2><p>Unpaid</p></div>
+        <div class="card"><h2>{{ paid_sales }}</h2><p>Paid Sales (TZS)</p></div>
+        <div class="card"><h2>{{ total_sales }}</h2><p>Total Sales (TZS)</p></div>
+        <div class="card"><h2>{{ total_points }}</h2><p>Total Points</p></div>
+        <div class="card"><h2>{{ daily_orders }}</h2><p>Today Orders</p></div>
+        <div class="card"><h2>{{ daily_pending }}</h2><p>Today Pending</p></div>
+        <div class="card"><h2>{{ weekly_orders }}</h2><p>This Week</p></div>
+        <div class="card"><h2>{{ monthly_orders }}</h2><p>This Month</p></div>
+        <div class="card"><h2>{{ household }}</h2><p>Household</p></div>
+        <div class="card"><h2>{{ vehicle }}</h2><p>Vehicle</p></div>
+        <div class="card"><h2>{{ business }}</h2><p>Business</p></div>
     </div>
 
     <h2>Recent Orders</h2>
-
     <table>
         <tr>
             <th>ID</th>
