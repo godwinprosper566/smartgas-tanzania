@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invoice #{{ order.id }} - SmartGas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f7fafc;
+        }
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+        h1 { color: #1a365d; text-align: center; margin-top: 0; }
+        p { margin: 8px 0; font-size: 15px; }
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            background: #ed8936;
+            color: white;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-right: 8px;
+        }
+        .print-btn {
+            background: #4a5568;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>SmartGas Invoice</h1>
+        <p><strong>Order ID:</strong> #{{ order.id }}</p>
+        <p><strong>Date:</strong> {{ order.created_at|date:"d M Y, H:i" }}</p>
+        <p><strong>Customer:</strong> {{ order.name }}</p>
+        <p><strong>Phone:</strong> {{ order.phone }}</p>
+        <p><strong>Location:</strong> {{ order.location }}</p>
+        <p><strong>Type:</strong> {{ order.customer_type }}</p>
+        <p><strong>Size:</strong> {{ order.size_kg }} kg</p>
+        <p><strong>Price:</strong> {{ order.price }} TZS</p>
+        <p><strong>Status:</strong> {{ order.status }}</p>
+        <p><strong>Payment:</strong> {{ order.payment_status }}</p>
+        <p><strong>Points:</strong> {{ order.points }}</p>
+
+        <button onclick="window.print()" class="print-btn">Print Invoice</button>
+        <a href="/track/" class="btn">Track Order</a>
+        <a href="/" class="btn">Home</a>
+    </div>
+</body>
+</html>

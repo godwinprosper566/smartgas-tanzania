@@ -16,5 +16,5 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('track/', views.track_order, name='track_order'),
     path('dashboard/', views.dashboard, name='dashboard'),
-    
+    path('invoice/<int:order_id>/', views.invoice, name='invoice'),
 ]

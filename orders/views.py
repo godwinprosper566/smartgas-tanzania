@@ -164,14 +164,15 @@ def daily_report(request):
     orders = Order.objects.filter(created_at__date=today).order_by('-id')
     total_sales = sum(order.price for order in orders)
     total_orders = orders.count()
+    total_points = sum(order.points for order in orders)
 
     return render(request, 'orders/daily_report.html', {
         'orders': orders,
         'total_sales': total_sales,
         'total_orders': total_orders,
+        'total_points': total_points,
         'today': today,
     })
-
 
 def login_view(request):
     if request.method == 'POST':
@@ -197,20 +198,30 @@ def logout_view(request):
 
 def track_order(request):
     order = None
+    orders = None
     error = None
 
     if request.method == 'POST':
-        order_id = request.POST.get('order_id')
-        try:
-            order = Order.objects.get(id=order_id)
-        except Order.DoesNotExist:
-            error = "Order not found. Please check the Order ID."
+        order_id = request.POST.get('order_id', '').strip()
+        phone = request.POST.get('phone', '').strip()
+
+        if order_id:
+            try:
+                order = Order.objects.get(id=order_id)
+            except Order.DoesNotExist:
+                error = "Order not found. Please check the Order ID."
+        elif phone:
+            orders = Order.objects.filter(phone__icontains=phone).order_by('-id')
+            if not orders.exists():
+                error = "No orders found for this phone number."
+        else:
+            error = "Enter Order ID or Phone number."
 
     return render(request, 'orders/track_order.html', {
         'order': order,
+        'orders': orders,
         'error': error
     })
-
 
 @login_required(login_url='login')
 def dashboard(request):
@@ -260,4 +271,14 @@ def dashboard(request):
         'weekly_orders': weekly_orders,
         'monthly_orders': monthly_orders,
         'daily_pending': daily_pending,
+    })
+
+def invoice(request, order_id):
+    try:
+        order = Order.objects.get(id=order_id)
+    except Order.DoesNotExist:
+        return redirect('track_order')
+
+    return render(request, 'orders/invoice.html', {
+        'order': order
     })

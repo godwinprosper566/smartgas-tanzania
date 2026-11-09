@@ -6,7 +6,7 @@
         body {
             font-family: Arial, sans-serif;
             background: #f7fafc;
-            max-width: 950px;
+            max-width: 1000px;
             margin: 30px auto;
             padding: 20px;
         }
@@ -45,6 +45,7 @@
             padding: 10px 20px;
             text-decoration: none;
             border-radius: 5px;
+            margin-right: 8px;
         }
         .print-btn {
             background: #4a5568;
@@ -68,7 +69,7 @@
         <a href="/">Home</a>
         <a href="/order/">Order Gas</a>
         <a href="/track/">Track Order</a>
-        <a href="/dashboard/" class="btn">Dashboard</a>
+        <a href="/dashboard/">Dashboard</a>
         <a href="/orders/">All Orders</a>
         <a href="/report/">Daily Report</a>
         <a href="/logout/">Logout</a>
@@ -83,7 +84,8 @@
 
     <div class="summary">
         <strong>Orders today:</strong> {{ total_orders }} &nbsp;|&nbsp;
-        <strong>Total Sales:</strong> {{ total_sales }} TZS
+        <strong>Total Sales:</strong> {{ total_sales }} TZS &nbsp;|&nbsp;
+        <strong>Points today:</strong> {{ total_points }}
     </div>
 
     <table>
@@ -95,6 +97,7 @@
             <th>Price</th>
             <th>Status</th>
             <th>Payment</th>
+            <th>Points</th>
         </tr>
         {% for order in orders %}
         <tr>
@@ -105,10 +108,11 @@
             <td>{{ order.price }} TZS</td>
             <td>{{ order.status }}</td>
             <td>{{ order.payment_status }}</td>
+            <td>{{ order.points }}</td>
         </tr>
         {% empty %}
         <tr>
-            <td colspan="7" style="text-align:center;">No orders today.</td>
+            <td colspan="8" style="text-align:center;">No orders today.</td>
         </tr>
         {% endfor %}
     </table>

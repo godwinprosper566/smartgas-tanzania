@@ -6,7 +6,7 @@
         body {
             font-family: Arial, sans-serif;
             background: #f7fafc;
-            max-width: 450px;
+            max-width: 480px;
             margin: 40px auto;
             padding: 20px;
         }
@@ -38,15 +38,19 @@
             text-decoration: none;
             font-weight: bold;
         }
-        .result {
+        .result, .list-box {
             background: white;
             padding: 20px;
             border-radius: 8px;
             margin-top: 25px;
             box-shadow: 0 1px 4px rgba(0,0,0,0.08);
         }
-        .result p { margin: 10px 0; font-size: 15px; }
+        .result p, .list-box p { margin: 10px 0; font-size: 15px; }
         .error { color: #e53e3e; text-align: center; margin-top: 15px; }
+        .order-item {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 12px 0;
+        }
         footer {
             text-align: center;
             margin-top: 40px;
@@ -73,8 +77,12 @@
 
     <form method="POST">
         {% csrf_token %}
-        <label>Enter Order ID</label>
-        <input type="number" name="order_id" placeholder="Example: 5" required>
+        <label>Order ID (optional)</label>
+        <input type="number" name="order_id" placeholder="Example: 5">
+
+        <label>Phone Number (optional)</label>
+        <input type="text" name="phone" placeholder="Example: 0754123456">
+
         <button type="submit">Track Order</button>
     </form>
 
@@ -92,24 +100,23 @@
         <p><strong>Type:</strong> {{ order.customer_type }}</p>
         <p><strong>Size:</strong> {{ order.size_kg }} kg</p>
         <p><strong>Price:</strong> {{ order.price }} TZS</p>
-        <p><strong>Status:</strong>
-            {% if order.status == "Pending" %}
-                <span style="color:#dd6b20; font-weight:bold;">{{ order.status }}</span>
-            {% elif order.status == "Out for Delivery" %}
-                <span style="color:#3182ce; font-weight:bold;">{{ order.status }}</span>
-            {% else %}
-                <span style="color:#38a169; font-weight:bold;">{{ order.status }}</span>
-            {% endif %}
-        </p>
-        <p><strong>Payment:</strong>
-            {% if order.payment_status == "Paid" %}
-                <span style="color:#38a169; font-weight:bold;">Paid</span>
-            {% else %}
-                <span style="color:#e53e3e; font-weight:bold;">Unpaid</span>
-            {% endif %}
-        </p>
+        <p><strong>Status:</strong> {{ order.status }}</p>
+        <p><strong>Payment:</strong> {{ order.payment_status }}</p>
         <p><strong>Points earned:</strong> {{ order.points }}</p>
         <p><strong>Notes:</strong> {{ order.notes|default:"—" }}</p>
+    </div>
+    {% endif %}
+
+    {% if orders %}
+    <div class="list-box">
+        <p><strong>Orders found:</strong></p>
+        {% for o in orders %}
+        <div class="order-item">
+            <p><strong>#{{ o.id }}</strong> — {{ o.name }} — {{ o.size_kg }}kg</p>
+            <p>Status: {{ o.status }} | Payment: {{ o.payment_status }} | Points: {{ o.points }}</p>
+            <p>{{ o.created_at|date:"d M Y" }}</p>
+        </div>
+        {% endfor %}
     </div>
     {% endif %}
 
